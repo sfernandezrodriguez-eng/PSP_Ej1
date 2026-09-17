@@ -13,4 +13,11 @@ void main() {
     String resultado3 = app.memoriaTotalReservada2();
     System.out.println("MEMORIA · DESPUES\n" +
             "================================================== \n" + resultado3);
+
+    void resultado4 = app.informeSistema();
+    System.out.println(resultado4);
+
+
+
+
 }
