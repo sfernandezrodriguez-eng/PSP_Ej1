@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -49,53 +50,55 @@ public class InformeSistema {
         return respuesta;
     }
 
-    public void informeSistema(){
+    public void informeSistema(String[] args) {
+        // 1. SISTEMA
+        String osName = System.getProperty("os.name");
+        String fileSep = System.getProperty("file.separator");
+        String userHome = System.getProperty("user.home");
+        String ruta = userHome + fileSep + "psp" + fileSep + "informe.txt";
 
-            // 1. Mostrar información básica del sistema
-            String osName = System.getProperty("os.name");
-            String fileSep = System.getProperty("file.separator");
-            String userHome = System.getProperty("user.home");
-            String ruta = userHome + fileSep + "psp" + fileSep + "informe.txt";
+        System.out.println("SISTEMA");
+        System.out.println("==================================================");
+        System.out.println("os.name: " + osName);
+        System.out.println("file.separator: \"" + fileSep + "\"");
+        System.out.println("Ruta construida con las propiedades:");
+        System.out.println(ruta);
 
-            System.out.println("SISTEMA");
-            System.out.println("===================================================");
-            System.out.println("  os.name:        " + osName);
-            System.out.println("  file.separator: \"" + fileSep + "\"");
-            System.out.println("  Ruta construida con las propiedades:");
-            System.out.println("    " + ruta);
-            System.out.println();
+        // 2. PROPIEDADES QUE EMPIEZAN POR
+        String[] prefijos = (args != null && args.length > 0)
+                ? args
+                : new String[]{"os.", "user.", "java.version"};
 
-            // 2. Filtrar y ordenar propiedades del sistema
-            System.out.println("PROPIEDADES QUE EMPIEZAN POR os., user., java.version");
-            System.out.println("===================================================");
+        System.out.println("PROPIEDADES QUE EMPIEZAN POR " + String.join(", ", prefijos));
+        System.out.println("==================================================");
 
-            Properties props = System.getProperties();
-            TreeMap<String, String> sortedProps = new TreeMap<>();
+        Properties props = System.getProperties();
+        TreeMap<String, String> sortedProps = new TreeMap<>();
 
-            for (String name : props.stringPropertyNames()) {
-                if (name.startsWith("os.") || name.startsWith("user.") || name.startsWith("java.version")) {
-                    sortedProps.put(name, props.getProperty(name));
-                }
+        // Filtrar según los prefijos recibidos o los de por defecto
+        for (String name : props.stringPropertyNames()) {
+            if (Arrays.stream(prefijos).anyMatch(name::startsWith)) {
+                sortedProps.put(name, props.getProperty(name));
             }
-
-            for (var entry : sortedProps.entrySet()) {
-                System.out.println("  " + entry.getKey() + " = " + entry.getValue());
-            }
-            System.out.println();
-
-            // 3. Pausar la ejecución para inspección del proceso
-            System.out.println("PROCESO EN ESPERA");
-            System.out.println("===================================================");
-            System.out.println("  Buscame desde otra terminal con:");
-            System.out.println("    ps -ef | grep InformeSistema");
-            System.out.println();
-            System.out.print("  Pulsa INTRO para terminar...");
-
-            Scanner scanner = new Scanner(System.in);
-            scanner.nextLine();
-
-            System.out.println("  Fin del programa.");
         }
+
+        // Mostrar las propiedades ordenadas alfabéticamente
+        for (var entry : sortedProps.entrySet()) {
+            System.out.println(entry.getKey() + " = " + entry.getValue());
+        }
+
+        // 3. PROCESO EN ESPERA
+        System.out.println("PROCESO EN ESPERA");
+        System.out.println("==================================================");
+        System.out.println("Buscame desde otra terminal con:");
+        System.out.println("ps -ef | grep InformeSistema");
+        System.out.println("Pulsa INTRO para terminar...");
+
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
+
+        System.out.println("Fin del programa.");
+    }
 
 
 }

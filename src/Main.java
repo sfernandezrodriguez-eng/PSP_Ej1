@@ -14,8 +14,8 @@ void main() {
     System.out.println("MEMORIA · DESPUES\n" +
             "================================================== \n" + resultado3);
 
-    void resultado4 = app.informeSistema();
-    System.out.println(resultado4);
+
+
 
 
 
